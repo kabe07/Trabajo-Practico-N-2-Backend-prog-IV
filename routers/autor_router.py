@@ -3,7 +3,7 @@ from sqlmodel import Session
 
 from database import obtener_session
 from models.autor import Autor
-from services.autor_service import crear_autor
+from services.autor_service import crear_autor, obtener_autores
 
 
 router=APIRouter(prefix="/autores", tags=["Autores"])
@@ -14,3 +14,7 @@ def registrar_autor(
     session:Session=Depends(obtener_session) #FastAPI, antes de ejecutar esta función, usá obtener_session para conseguir una sesión y pasámela en el parámetro session”
 ):
     return crear_autor(session, autor)
+
+@router.get("/")
+def listar_autores(session: Session= Depends(obtener_session)):
+    return obtener_autores(session)
