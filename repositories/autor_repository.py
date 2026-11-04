@@ -1,4 +1,4 @@
-from sqlmodel import Session
+from sqlmodel import Session, Select
 from models.autor import Autor
 
 
@@ -6,3 +6,7 @@ def guardar_autor(session: Session, autor: Autor):#el repository prepara el guar
     session.add(autor)
     session.flush()
     return autor
+
+def listar_autores(session: Session):
+    consulta=Select(Autor)#Select(autor) ->prepara una consulta para obtener los autores
+    return session.exec(consulta).all() #La ejecuta y obtiene todos los resultados.
