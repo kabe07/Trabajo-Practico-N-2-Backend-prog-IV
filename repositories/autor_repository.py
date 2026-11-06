@@ -10,3 +10,6 @@ def guardar_autor(session: Session, autor: Autor):#el repository prepara el guar
 def listar_autores(session: Session):
     consulta=select(Autor)#Select(autor) ->prepara una consulta para obtener los autores
     return session.exec(consulta).all() #La ejecuta y obtiene todos los resultados.
+
+def buscar_autor_por_id(session: Session, autor_id: int):
+    return session.get(Autor, autor_id) #Aqui le estamos indicando en que entidad buscar "Autor" y buscarlo por su id.
