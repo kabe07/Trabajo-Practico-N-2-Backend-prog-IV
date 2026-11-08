@@ -22,3 +22,10 @@ def obtener_autor_por_id(session: Session, autor_id: int):
         )
     return autor
 
+def actualizar_autor(session:Session, autor_id:int, nombre:str):
+    autor=obtener_autor_por_id(session,autor_id)
+    autor.nombre=nombre
+    session.commit()
+    session.refresh(autor)
+    return autor
+
