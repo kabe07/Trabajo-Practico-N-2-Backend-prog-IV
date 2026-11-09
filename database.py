@@ -1,6 +1,7 @@
 from sqlmodel import SQLModel, Session, create_engine
 from models.autor import Autor #Permite que SQLModel conozca el modelo y su 
 from models.libro import Libro
+from models.libro_autor import Libro_Autor
 
 
 engine= create_engine("sqlite:///biblioteca.db", connect_args={"check_same_thread":False},) #Aqui indico que motor de base de datos voy a utilizar y donde se van a guardar los datos.
