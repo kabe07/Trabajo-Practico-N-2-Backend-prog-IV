@@ -1,6 +1,6 @@
 from sqlmodel import Session
 from models.autor import Autor
-from repositories.autor_repository import guardar_autor, listar_autores, buscar_autor_por_id
+from repositories.autor_repository import guardar_autor, listar_autores, eliminar_autor,buscar_autor_por_id
 from fastapi import HTTPException
 
 
@@ -28,4 +28,9 @@ def actualizar_autor(session:Session, autor_id:int, nombre:str):
     session.commit()
     session.refresh(autor)
     return autor
+
+def borrar_autor(session: Session, autor_id: int)-> None:
+    autor= obtener_autor_por_id(session, autor_id)
+    eliminar_autor(session,autor)
+    session.commit()
 

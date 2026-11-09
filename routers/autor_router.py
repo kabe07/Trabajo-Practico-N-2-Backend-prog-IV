@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session
 
 from database import obtener_session
-from models.autor import Autor
-from services.autor_service import crear_autor, obtener_autores, obtener_autor_por_id
+from models.autor import Autor, AutorActualizacion
+from services.autor_service import crear_autor, obtener_autores, obtener_autor_por_id, actualizar_autor, borrar_autor
 
 
 router=APIRouter(prefix="/autores", tags=["Autores"])
@@ -28,3 +28,17 @@ def consultar_autor(
     return obtener_autor_por_id(session, autor_id)
 
 
+@router.patch("/{autor_id}")
+def modificar_autor(
+    autor_id:int,
+    datos:AutorActualizacion,
+    session: Session =Depends(obtener_session)
+):
+    return actualizar_autor(session,autor_id,datos.nombre)
+
+@router.delete("/{autor_id}", status_code=204)
+def eliminar_autor(
+    autor_id:int,
+    session:Session=Depends(obtener_session),
+)->None:
+    borrar_autor(session, autor_id)

@@ -13,3 +13,6 @@ def listar_autores(session: Session):
 
 def buscar_autor_por_id(session: Session, autor_id: int):
     return session.get(Autor, autor_id) #Aqui le estamos indicando en que entidad buscar "Autor" y buscarlo por su id.
+
+def eliminar_autor(session: Session, autor: Autor)-> None:
+    session.delete(autor)
