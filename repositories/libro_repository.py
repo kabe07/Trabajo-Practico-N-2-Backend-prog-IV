@@ -10,7 +10,7 @@ def buscar_libro_por_id(session:Session, libro_id:int):
 def buscar_asociaciones(session: Session, libro_id: int, autor_id: int):
     return session.get(Libro_Autor,(libro_id,autor_id) )
 
-def guardar_asociaciones(session: Session, autor_id: int, libro_id:int):
+def guardar_asociaciones(session: Session, libro_id:int,autor_id: int):
     asociacion= Libro_Autor(libro_id=libro_id, autor_id=autor_id)
     session.add(asociacion)
     return asociacion 

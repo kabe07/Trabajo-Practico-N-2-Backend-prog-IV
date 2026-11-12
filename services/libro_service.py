@@ -16,7 +16,7 @@ def asociar_autor_a_libro(session:Session, libro_id:int, autor_id:int):
     if buscar_asociaciones(session,libro_id,autor_id) is not None:
         raise HTTPException(status_code=409,detail="El autor ya esta asociado al libro")
 
-    asociacion=guardar_asociaciones(session,autor_id,libro_id)
+    asociacion=guardar_asociaciones(session,libro_id,autor_id)
     session.commit()
     session.refresh(asociacion)
     return asociacion
