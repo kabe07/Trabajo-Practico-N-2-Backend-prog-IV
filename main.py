@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from database import crear_tablas
 from routers.autor_router import router as autor_router
+from routers.libro_router import router as libro_router
 
 
 @asynccontextmanager
@@ -12,6 +13,7 @@ async def lifespan(app:FastAPI):
 
 app=FastAPI(lifespan=lifespan)#Llamamos a crear las tablas cuando se inicie la aplicacion
 app.include_router(autor_router)
+app.inlude_router(libro_router)
 
 @app.get("/")
 def inicio():
