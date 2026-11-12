@@ -12,3 +12,4 @@ class LibroCreacion(SQLModel):
     isbn:str
     stock:int=Field(default=0, ge=0)# ge exige que sea mayor o igual a 0
 
+

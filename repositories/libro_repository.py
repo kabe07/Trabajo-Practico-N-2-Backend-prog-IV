@@ -14,3 +14,8 @@ def guardar_asociaciones(session: Session, libro_id:int,autor_id: int):
     asociacion= Libro_Autor(libro_id=libro_id, autor_id=autor_id)
     session.add(asociacion)
     return asociacion 
+
+def guardar_libro(session:Session,libro:Libro):
+    session.add(libro)
+    session.flush() #Inserta una nueva fila a la tabla y obtenemos el ID
+    return libro
