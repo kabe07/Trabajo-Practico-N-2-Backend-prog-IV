@@ -44,5 +44,16 @@ def crear_libro(session:Session, datos:LibroCreacion):
     session.refresh(libro)
     return libro
 
-def obtener_libros(session: Session):
-    return listar_libros(session)
+def obtener_libros(session: Session, disponibles: bool = False):
+    return listar_libros(session, disponibles)
+
+def obtener_libro_por_id(session: Session, libro_id: int):
+    libro = buscar_libro_por_id(session, libro_id)
+
+    if libro is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Libro no encontrado",
+        )
+
+    return libro

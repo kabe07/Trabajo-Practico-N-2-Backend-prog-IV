@@ -4,7 +4,7 @@ from models.libro import LibroCreacion
 
 
 from database import obtener_session
-from services.libro_service import asociar_autor_a_libro, crear_libro,obtener_libros
+from services.libro_service import asociar_autor_a_libro, crear_libro,obtener_libros,obtener_libro_por_id
 
 router=APIRouter(prefix="/lbros", tags=["Libros"])
 
@@ -22,6 +22,18 @@ def registrar_libro(
     session: Session = Depends(obtener_session),
 ):
     return crear_libro(session, datos)
+
 @router.get("/")
-def consultar_libros(session: Session = Depends(obtener_session)):
-    return obtener_libros(session)
+def consultar_libros(
+    disponibles: bool = False,
+    session: Session = Depends(obtener_session),
+):
+    return obtener_libros(session, disponibles)
+
+@router.get("/{id}")
+def consultar_libro(
+    id: int,
+    session: Session = Depends(obtener_session),
+):
+    return obtener_libro_por_id(session, id)
+

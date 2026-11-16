@@ -20,5 +20,12 @@ def guardar_libro(session:Session,libro:Libro):
     session.flush() #Inserta una nueva fila a la tabla y obtenemos el ID
     return libro
 
-def listar_libros(session: Session):
-    return session.exec(select(Libro)).all()
+def listar_libros(session: Session, disponibles: bool = False):
+    consulta = select(Libro)
+
+    if disponibles:
+        consulta = consulta.where(Libro.stock > 0)
+
+    return session.exec(consulta).all()
+
+
