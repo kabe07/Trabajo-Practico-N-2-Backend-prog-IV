@@ -1,20 +1,33 @@
 from sqlmodel import SQLModel, Field
+from models.autor import Autor
 
-class Libro(SQLModel, table=True):#Libro Hereda de SQLModel
-    id: int | None = Field(default=None, primary_key=True)  #Puede ser entero o estar sin asignar(int | None)  Luego indica que el campo por defecto es none y que es la clave primaria
-    titulo:str
-    isbn: str=Field(unique=True)
-    stock:int =Field(default= 0)
+
+class Libro(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    titulo: str
+    isbn: str = Field(unique=True)
+    stock: int = Field(default=0, ge=0)
+    anio: int | None = None
 
 
 class LibroCreacion(SQLModel):
-    titulo:str
-    isbn:str
-    stock:int=Field(default=0, ge=0)# ge exige que sea mayor o igual a 0
+    titulo: str = Field(min_length=1)
+    isbn: str = Field(min_length=1)
+    stock: int = Field(default=0, ge=0)
+    anio: int | None = Field(default=None, ge=1)
+
 
 class LibroActualizacion(SQLModel):
-    titulo: str | None = None
-    isbn: str | None = None
+    titulo: str | None = Field(default=None, min_length=1)
+    isbn: str | None = Field(default=None, min_length=1)
     stock: int | None = Field(default=None, ge=0)
+    anio: int | None = Field(default=None, ge=1)
 
 
+class LibroRespuesta(SQLModel):
+    id: int
+    titulo: str
+    isbn: str
+    stock: int
+    anio: int | None
+    autores: list[Autor] = Field(default_factory=list)

@@ -29,3 +29,21 @@ def listar_libros(session: Session, disponibles: bool = False):
     return session.exec(consulta).all()
 
 
+
+
+def obtener_autores_libro(session: Session, libro_id: int):
+    from models.autor import Autor
+    consulta = select(Autor).join(
+        Libro_Autor, Libro_Autor.autor_id == Autor.id
+    ).where(Libro_Autor.libro_id == libro_id)
+    return session.exec(consulta).all()
+
+
+def eliminar_libro(session: Session, libro: Libro):
+    asociaciones = session.exec(
+        select(Libro_Autor).where(Libro_Autor.libro_id == libro.id)
+    ).all()
+    for asociacion in asociaciones:
+        session.delete(asociacion)
+    session.flush()
+    session.delete(libro)

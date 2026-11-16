@@ -1,15 +1,41 @@
+from pathlib import Path
+from sqlalchemy import event, inspect
 from sqlmodel import SQLModel, Session, create_engine
-from models.autor import Autor #Permite que SQLModel conozca el modelo y su 
+
+from models.autor import Autor
 from models.libro import Libro
 from models.libro_autor import Libro_Autor
+from models.socio import Socio
+from models.prestamo import Prestamo
 
 
-engine= create_engine("sqlite:///biblioteca.db", connect_args={"check_same_thread":False},) #Aqui indico que motor de base de datos voy a utilizar y donde se van a guardar los datos.
-#check_same_thread=False permite usar SQLite con los distintos hilos con los que FastAPI puede atender peticiones.
+BASE_DIR = Path(__file__).resolve().parent
+engine = create_engine(
+    f"sqlite:///{(BASE_DIR / 'biblioteca.db').as_posix()}",
+    connect_args={"check_same_thread": False, "timeout": 30},
+)
 
-def crear_tablas(): #Es una funcion que crea las tablas que todavia no existen en esa base de datos.
+
+@event.listens_for(engine, "connect")
+def activar_claves_foraneas(connection, record):
+    connection.execute("PRAGMA foreign_keys=ON")
+
+
+def crear_tablas():
     SQLModel.metadata.create_all(engine)
+    # Completa las tablas de la primera version sin borrar sus registros.
+    with engine.begin() as connection:
+        inspector = inspect(connection)
+        columnas_autor = {c["name"].lower() for c in inspector.get_columns("autor")}
+        if "nacionalidad" not in columnas_autor:
+            connection.exec_driver_sql(
+                "ALTER TABLE autor ADD COLUMN nacionalidad TEXT NOT NULL DEFAULT ''"
+            )
+        columnas_libro = {c["name"].lower() for c in inspector.get_columns("libro")}
+        if "anio" not in columnas_libro:
+            connection.exec_driver_sql("ALTER TABLE libro ADD COLUMN anio INTEGER")
+
 
 def obtener_session():
-    with Session(engine) as session:#crea una sesión usando nuestra conexión.
-        yield session #entrega esa sesión al endpoint que la necesite.
+    with Session(engine) as session:
+        yield session

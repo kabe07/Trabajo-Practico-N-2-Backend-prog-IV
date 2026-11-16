@@ -1,8 +1,17 @@
 from sqlmodel import SQLModel, Field
 
-class Autor(SQLModel, table=True): #Indica que la clase representa una tabla en la base de datos.
-    id: int | None= Field(default=None, primary_key=True) #El id lo genera la base de datos al guardar
-    nombre: str
 
-class AutorActualizacion(SQLModel):  #Como no tiene table=True, no crea otra tabla.
-    nombre:str
+class Autor(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    nombre: str
+    nacionalidad: str = ""
+
+
+class AutorCreacion(SQLModel):
+    nombre: str = Field(min_length=1)
+    nacionalidad: str = ""
+
+
+class AutorActualizacion(SQLModel):
+    nombre: str | None = Field(default=None, min_length=1)
+    nacionalidad: str | None = None
