@@ -2,3 +2,9 @@
 __pycache__/
 .pytest_cache/
 biblioteca.db
+
+.coverage
+htmlcov/
+*.db-journal
+*.db-wal
+*.db-shm
