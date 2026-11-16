@@ -4,6 +4,7 @@ from repositories.libro_repository import (
     buscar_asociaciones,
     buscar_libro_por_id,
     guardar_asociaciones,
+    listar_libros,
 )
 from sqlalchemy.exc import IntegrityError
 
@@ -43,3 +44,5 @@ def crear_libro(session:Session, datos:LibroCreacion):
     session.refresh(libro)
     return libro
 
+def obtener_libros(session: Session):
+    return listar_libros(session)

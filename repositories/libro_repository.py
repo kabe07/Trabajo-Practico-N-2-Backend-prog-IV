@@ -1,4 +1,4 @@
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from models.libro import Libro
 from models.libro_autor import Libro_Autor
@@ -19,3 +19,6 @@ def guardar_libro(session:Session,libro:Libro):
     session.add(libro)
     session.flush() #Inserta una nueva fila a la tabla y obtenemos el ID
     return libro
+
+def listar_libros(session: Session):
+    return session.exec(select(Libro)).all()

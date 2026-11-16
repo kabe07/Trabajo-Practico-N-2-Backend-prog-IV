@@ -13,7 +13,7 @@ async def lifespan(app:FastAPI):
 
 app=FastAPI(lifespan=lifespan)#Llamamos a crear las tablas cuando se inicie la aplicacion
 app.include_router(autor_router)
-app.inlude_router(libro_router)
+app.include_router(libro_router)
 
 @app.get("/")
 def inicio():
