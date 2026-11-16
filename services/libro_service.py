@@ -8,7 +8,7 @@ from repositories.libro_repository import (
 )
 from sqlalchemy.exc import IntegrityError
 
-from models.libro import Libro, LibroCreacion
+from models.libro import Libro, LibroCreacion, LibroActualizacion
 from repositories.libro_repository import guardar_libro
 
 from services.autor_service import obtener_autor_por_id
@@ -29,7 +29,7 @@ def asociar_autor_a_libro(session:Session, libro_id:int, autor_id:int):
 def crear_libro(session:Session, datos:LibroCreacion):
     libro=Libro(
         titulo=datos.titulo,
-        ISBN=datos.isbn,
+        isbn=datos.isbn,
         stock=datos.stock,
     )
     try:
@@ -56,4 +56,28 @@ def obtener_libro_por_id(session: Session, libro_id: int):
             detail="Libro no encontrado",
         )
 
+    return libro
+
+def actualizar_libro(
+    session: Session,
+    libro_id: int,
+    datos: LibroActualizacion,
+):
+    libro = obtener_libro_por_id(session, libro_id)
+
+    cambios = datos.model_dump(exclude_unset=True, exclude_none=True)
+
+    for campo, valor in cambios.items():
+        setattr(libro, campo, valor)
+
+    try:
+        session.commit()
+    except IntegrityError:
+        session.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail="Ya existe un libro con ese ISBN",
+        )
+
+    session.refresh(libro)
     return libro

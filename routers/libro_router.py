@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlmodel import Session
-from models.libro import LibroCreacion
+from models.libro import LibroCreacion,LibroActualizacion
 
 
 from database import obtener_session
-from services.libro_service import asociar_autor_a_libro, crear_libro,obtener_libros,obtener_libro_por_id
+from services.libro_service import asociar_autor_a_libro, crear_libro,obtener_libros,obtener_libro_por_id,actualizar_libro
 
 router=APIRouter(prefix="/lbros", tags=["Libros"])
 
@@ -37,3 +37,10 @@ def consultar_libro(
 ):
     return obtener_libro_por_id(session, id)
 
+@router.patch("/{id}")
+def modificar_libro(
+    id: int,
+    datos: LibroActualizacion,
+    session: Session = Depends(obtener_session),
+):
+    return actualizar_libro(session, id, datos)
