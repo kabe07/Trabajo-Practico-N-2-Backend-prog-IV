@@ -87,4 +87,4 @@ e ignoran valores `null`. Nacionalidad tiene valor inicial vacio y anio puede se
 para admitir los registros creados en la primera version del proyecto. Ambos se pueden editar.
 Al iniciar se agregan estas dos columnas si faltan, conservando los registros existentes.
 
-La API implementa el alcance obligatorio del TP, sin autenticacion ni roles.
+
